@@ -1,0 +1,41 @@
+apply plugin: "java"
+
+group = "com.github.blamevic.enumerators"
+
+compileJava {
+    options.incremental = true
+    options.fork = true
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile "junit:junit:4.+"
+    testCompile 'org.assertj:assertj-core:1.+'
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives sourcesJar
+}
+
+test {
+    testLogging {
+        exceptionFormat = 'full'
+    }
+
+    testLogging.showStandardStreams = true
+
+    beforeTest { descriptor ->
+        logger.lifecycle("Running test: " + descriptor)
+    }
+}
